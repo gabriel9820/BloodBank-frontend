@@ -1,4 +1,9 @@
-import { DEFAULT_CURRENCY_CODE, ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
+import {
+  DEFAULT_CURRENCY_CODE,
+  ErrorHandler,
+  LOCALE_ID,
+  NgModule,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,9 +38,9 @@ import { GlobalErrorHandler } from './core/errors/global-error-handler';
       useValue: 'BRL',
     },
     {
-          provide: ErrorHandler,
-          useClass: GlobalErrorHandler,
-        },
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
   ],
   bootstrap: [AppComponent],
 })

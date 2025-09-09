@@ -7,6 +7,7 @@ import { isInvalid } from 'src/app/shared/utils/helpers';
 import { formMessages } from 'src/app/shared/utils/messages';
 import { FormMode } from 'src/app/shared/models/form-mode.model';
 import { masks } from 'src/app/shared/utils/masks';
+import { MessageService } from 'src/app/shared/services/message.service';
 
 @Component({
   selector: 'app-hospital-form',
@@ -38,7 +39,8 @@ export class HospitalFormComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly fb: FormBuilder,
-    private readonly hospitalsService: HospitalsService
+    private readonly hospitalsService: HospitalsService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -50,19 +52,14 @@ export class HospitalFormComponent implements OnInit {
   }
 
   fillInputs(id: number) {
-    this.hospitalsService.getById(Number(id)).subscribe(
-      (hospital) => {
-        this.hospitalForm.patchValue({
-          id: hospital.id,
-          name: hospital.name,
-          landlineNumber: hospital.landlineNumber,
-          address: hospital.address,
-        });
-      },
-      (error) => {
-        console.error('Error ao carregar os dados do hospital', error);
-      }
-    );
+    this.hospitalsService.getById(Number(id)).subscribe((hospital) => {
+      this.hospitalForm.patchValue({
+        id: hospital.id,
+        name: hospital.name,
+        landlineNumber: hospital.landlineNumber,
+        address: hospital.address,
+      });
+    });
   }
 
   onSubmit() {
@@ -74,25 +71,15 @@ export class HospitalFormComponent implements OnInit {
     const payload = this.hospitalForm.value;
 
     if (this.mode === 'create') {
-      this.hospitalsService.create(payload).subscribe(
-        (response) => {
-          console.log('Hospital cadastrado com sucesso!', response);
-          this.router.navigate(['/hospitals']);
-        },
-        (error) => {
-          console.error('Error ao criar hospital', error);
-        }
-      );
+      this.hospitalsService.create(payload).subscribe(() => {
+        this.messageService.success('Hospital cadastrado com sucesso!');
+        this.router.navigate(['/hospitals']);
+      });
     } else if (this.mode === 'edit' && this.id) {
-      this.hospitalsService.update(+this.id, payload).subscribe(
-        (response) => {
-          console.log('Hospital atualizado com sucesso!', response);
-          this.router.navigate(['/hospitals']);
-        },
-        // (error) => {
-        //   console.error('Error ao atualizar hospital', error);
-        // }
-      );
+      this.hospitalsService.update(+this.id, payload).subscribe(() => {
+        this.messageService.success('Hospital atualizado com sucesso!');
+        this.router.navigate(['/hospitals']);
+      });
     }
   }
 

@@ -9,6 +9,7 @@ import { HospitalsService } from '../../services/hospitals.service';
 import { HospitalListResponse } from '../../models/hospital-response.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { MessageService } from 'src/app/shared/services/message.service';
 
 @Component({
   selector: 'app-hospital-list',
@@ -31,7 +32,8 @@ export class HospitalListComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly hospitalsService: HospitalsService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -58,17 +60,16 @@ export class HospitalListComponent implements OnInit, OnDestroy {
 
     this.hospitalsService
       .getAll(this.pagination.pageNumber, this.pagination.pageSize)
-      .subscribe(
-        (response) => {
+      .subscribe({
+        next: (response) => {
           this.dataSource.data = response.data;
           this.pagination.totalRecords = response.totalRecords;
           this.isLoading = false;
         },
-        (error) => {
-          console.error('Erro ao buscar hospitais!', error);
+        complete: () => {
           this.isLoading = false;
-        }
-      );
+        },
+      });
   }
 
   goToEditHospital(id: number) {
@@ -85,15 +86,10 @@ export class HospitalListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.hospitalsService.delete(id).subscribe(
-          () => {
-            console.log('Hospital deletado com sucesso!');
-            this.getAllHospitals();
-          },
-          (error) => {
-            console.error('Erro ao deletar hospital!', error);
-          }
-        );
+        this.hospitalsService.delete(id).subscribe(() => {
+          this.messageService.success('Hospital deletado com sucesso!');
+          this.getAllHospitals();
+        });
       }
     });
   }

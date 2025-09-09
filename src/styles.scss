@@ -76,3 +76,16 @@ body {
 .mb-4 {
   margin-bottom: 24px !important;
 }
+
+.snackbar-success {
+  background: #43a047;
+  color: #fff;
+}
+.snackbar-error {
+  background: #e53935;
+  color: #fff;
+}
+.snackbar-info {
+  background: #1e88e5;
+  color: #fff;
+}

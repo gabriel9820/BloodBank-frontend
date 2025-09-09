@@ -34,15 +34,9 @@ export class LoginComponent implements OnInit {
     }
 
     const payload: LoginRequest = this.loginForm.value;
-    this.loginService.login(payload).subscribe(
-      (response) => {
-        console.log('Login realizado com sucesso!', response);
-        // setar user no localStorage
-      },
-      (error) => {
-        console.error('Erro ao realizar login!', error);
-      }
-    );
+    this.loginService.login(payload).subscribe((response) => {
+      localStorage.setItem('user', JSON.stringify(response));
+    });
   }
 
   togglePasswordVisibility(): void {

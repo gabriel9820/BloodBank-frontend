@@ -1,31 +1,28 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { MessageService } from 'src/app/shared/services/message.service';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private errorDialogService: MatSnackBar, private zone: NgZone) {}
+  constructor(private messageService: MessageService, private zone: NgZone) {}
 
   handleError(error: any) {
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    }
-
     let message = 'Ocorreu um erro inesperado.';
 
-    if (error.error?.errors) {
-      const errors = error.error.errors;
-      message = Object.values(errors).flat().join('\n');
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 0) {
+        message = 'Não foi possível conectar ao servidor.';
+      } else if (error.error?.errors) {
+        const errors = error.error.errors;
+        message = Object.values(errors).flat().join('\n');
+      } else {
+        message = error.error?.title || error.error || message;
+      }
     }
 
-    this.zone.run(() =>
-      this.errorDialogService.open(message, 'Fechar', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 5000,
-      })
-    );
+    this.zone.run(() => this.messageService.error(message));
 
-    console.error('Error from global error handler', error);
+    console.error('GlobalErrorHandler', error);
   }
 }
