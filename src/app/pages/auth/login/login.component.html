@@ -1,0 +1,64 @@
+<div class="login-container">
+  <div class="login-container__left">
+    <img class="logo-img" src="assets/logo.png" alt="Logo" />
+  </div>
+
+  <div class="login-container__right">
+    <mat-card class="login-card">
+      <mat-card-title class="text-center mb-4">Bem-vindo!</mat-card-title>
+
+      <mat-card-subtitle class="text-center mb-4">
+        Por favor, informe seus dados para acessar o sistema.
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              formControlName="email"
+              matInput
+              type="email"
+              autocomplete="email"
+            />
+            <mat-error *ngIf="isInvalid('email', 'required')">
+              {{ formMessages.required }}
+            </mat-error>
+            <mat-error *ngIf="isInvalid('email', 'email')">
+              {{ formMessages.email }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input
+              formControlName="password"
+              matInput
+              [type]="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+            >
+              <mat-icon>
+                {{ showPassword ? "visibility" : "visibility_off" }}
+              </mat-icon>
+            </button>
+            <mat-error *ngIf="isInvalid('password', 'required')">
+              {{ formMessages.required }}
+            </mat-error>
+          </mat-form-field>
+
+          <a class="forgot-password-link mb-4">Esqueceu sua senha?</a>
+
+          <button class="full-width" mat-raised-button color="primary">
+            Entrar
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
