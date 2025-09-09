@@ -1,0 +1,83 @@
+<div>
+  <app-page-header [title]="title"></app-page-header>
+
+  <form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>ID</mat-label>
+      <input formControlName="id" matInput />
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input formControlName="name" matInput />
+      <mat-error *ngIf="isInvalid('name', 'required')">
+        {{ formMessages.required }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input
+        formControlName="landlineNumber"
+        matInput
+        [mask]="masks.landlineNumber"
+        
+      />
+      <mat-error *ngIf="isInvalid('landlineNumber', 'required')">
+        {{ formMessages.required }}
+      </mat-error>
+    </mat-form-field>
+
+    <div formGroupName="address">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Rua</mat-label>
+        <input formControlName="street" matInput />
+        <mat-error *ngIf="isInvalid('address.street', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Número</mat-label>
+        <input formControlName="number" matInput />
+        <mat-error *ngIf="isInvalid('address.number', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Bairro</mat-label>
+        <input formControlName="neighborhood" matInput />
+        <mat-error *ngIf="isInvalid('address.neighborhood', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Cidade</mat-label>
+        <input formControlName="city" matInput />
+        <mat-error *ngIf="isInvalid('address.city', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input formControlName="state" matInput />
+        <mat-error *ngIf="isInvalid('address.state', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>CEP</mat-label>
+        <input formControlName="zipCode" matInput [mask]="masks.zipCode" />
+        <mat-error *ngIf="isInvalid('address.zipCode', 'required')">
+          {{ formMessages.required }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <button class="full-width" mat-raised-button color="primary">Salvar</button>
+  </form>
+</div>
